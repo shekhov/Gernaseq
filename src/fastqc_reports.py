@@ -14,47 +14,65 @@ class Error (Exception):
 class InputError (Error):
 	""" Exceptions raised when input was wrong
 		Attributes:
-			expr -- the command when the error occured
 			msg -- explanation of the error
 	"""
-	def __init__(self, expr, msg):
-		self.expr = expr
+	def __init__(self, msg):
 		self.msg = msg
+		pass
 
-		
+
 def main (argv):
+
 	inputFolder=""
 	outputFolder=""
 	outputfile=""
-	errorMSG="Usage:\nfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>\nfastqc_report.py -h for help"
+	isZip=False
+
+	def Usage ():
+		errorMSG="Usage:\nfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>\nfastqc_report.py -h" \
+				 " for help"
+		print (errorMSG)
+		sys.exit()
+
 	try:
-		opts, args = getopt.getopt (argv, "hofi:", ["help",  "outputFolder", "filename", "inputFolder="])
+		opts, rest = getopt.getopt (argv, 'hzo:f:i:', ["help", "zip", "outputFolder=", "filename=", "inputFolder="])
 	except getopt.GetoptError:
-		print (errorMSG)
-		sys.exit(2)
-	if len (opts) == 0: 
-		print (errorMSG)
-		sys.exit (2)
+		Usage()
+
 	for opt, arg in opts:
 		if opt in ("-h", "--help"):
 			print ("Combine reports from fastqc to a single .csv table")
-			print ("Usage: fastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>")
-			print ("Or: fastqc_reports.py --inputFolder <inputFolder> --outputFolder <outputFolder> --filename <outputFileName>")
-			print ("Where: ")
-			print ("		-i a location of .zip files made by fastqc package")
-			print ("		-o an optional argument. A specified location for the output file. If not specified, the default file report will be created in the input folder")
-			print ("		-f am optional argument. A name of the report file with extention (.csv). Default name is fastqc_report")
-			sys.exit()
+			print ("Usage: \tfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>")
+			print ("Or: \tfastqc_reports.py --inputFolder <inputFolder> --outputFolder <outputFolder> --filename <outputFileName>")
+			print ("Arguments: ")
+			print ("\t-z (zip)an optional argument, set if zip archives should be scanned instead of folders")
+			print ("\t-i (inputFolder) a location of folders made by fastqc package. If not specified, use a current folder")
+			print ("\t-o (outputFolder) A specified location for the output file. If not specified, the default file report will be created in the input folder")
+			print ("\t-f (filename) A name of the report file with extention (.csv). Default name is fastqc_report.csv")
+			sys.exit(2)
+
+		elif opt in ("-z", "--zip"):
+			isZip=True
+
 		elif opt in ("-i", "--inputFolder"):
-			inputFolder = arg
+			path = os.path.join(os.getcwd(), arg)
+			if os.path.isdir (path) == True:
+				inputFolder = path
+			else: raise InputError (path+ " is not a directory")
+
 		elif opt in ("-o", "--outputFolder"):
 			outputFolder = arg
+
 		elif opt in ("-f", "--filename"):
-			outputFile = arg
+			if arg[-3:] == 'csv':
+				outputFile = arg
+			else: raise InputError ( "Wrong file type was given. Read help")
+			
+	if len (inputFolder) == 0: inputFolder = os.getcwd()
 	if len(outputFolder) == 0: outputFolder = inputFolder
 	if len(outputfile) == 0: outputFile = "fastqc_report.csv"
 			
-	print ("Input folder is " + inputFolder)	
+	print ("Input folder is " + inputFolder)
 
 	# List modules used by FastQC:
 	modules = ['Basic_Statistics',
