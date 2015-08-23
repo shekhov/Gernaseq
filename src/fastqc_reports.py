@@ -6,6 +6,22 @@ import subprocess
 import zipfile
 import getopt
 
+
+class Error (Exception):
+	"""Base error for this module"""
+	pass
+
+class InputError (Error):
+	""" Exceptions raised when input was wrong
+		Attributes:
+			expr -- the command when the error occured
+			msg -- explanation of the error
+	"""
+	def __init__(self, expr, msg):
+		self.expr = expr
+		self.msg = msg
+
+		
 def main (argv):
 	inputFolder=""
 	outputFolder=""
@@ -87,7 +103,7 @@ def main (argv):
 				mod_scores.append(scores[result])
 		
 		# Append to all module scores list:
-		all_modscores.append(mod_scores)
+		all_mod_scores.append(mod_scores)
 		
 		# close all opened files:
 		data.close()

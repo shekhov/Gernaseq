@@ -12,7 +12,12 @@ class FastqcTestCase (unittest.TestCase):
     """ Test of the fastqc report merging tool"""
     def testInputZero (self):
         """ Should give a message about usage """
-        self.assertRaises(getopt.GetoptError, fastqc_reports)
+
+    def testWrongInputPath (self):
+        """Path should exist"""
+
+    def testWrongFileExtention (self):
+        """Given name should be with .csv extention"""
 
 if __name__ == '__main__':
     unittest.main()
