@@ -1,6 +1,3 @@
-# Script created by James Ashmore https://www.biostars.org/p/152138/#152151
-# and edited by Anton Shekhov 
-
 # Import necessary libraries:
 import sys
 import csv
