@@ -15,19 +15,20 @@ class FastqcTestCase (unittest.TestCase):
 
     @unittest.skip
     def testHelpCalled (self):
-        """Argument -h or help should cause System exit """
+        """ Test Error. Argument -h or help should cause System exit """
         self.assertRaises(SystemExit, fastqc_reports.main, ("-h", ""))
         self.assertRaises(SystemExit, fastqc_reports.main, ("--help", ""))
 
     def testWrongInputPath (self):
-        """Path should exist as a directory"""
+        """Test Error. Path should exist as a directory"""
         self.assertRaises(fastqc_reports.InputError, fastqc_reports.main, ("-i", "poo"))
 
     def testZipFiles (self):
-        """Directory should contain at least one .zip file if -z argument was passed"""
+        """Test Error. Directory should contain at least one .zip file if -z argument was passed"""
+        self.assertRaises(fastqc_reports.TypeError, fastqc_reports.main, ("-z", "-i", "src"))
 
     def testWrongFileExtention (self):
-        """Given name should be with .csv extention"""
+        """Test Error. Given name should be with .csv extention"""
         self.assertRaises(fastqc_reports.InputError, fastqc_reports.main, ("-f", "poo.bar"))
 
 if __name__ == '__main__':
