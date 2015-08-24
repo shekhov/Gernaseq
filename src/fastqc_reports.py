@@ -172,14 +172,15 @@ def report_to_csv (dic, path, filename):
         
         # Create a header
         tests = (list ((next (iter (dic.values()))).keys()))
+        # Sort them by name, so all tests will be the same
+        tests.sort()
         tests = ["Name"] + tests
-        #print (tests)
-        #tests = ["Name"] + list (next (iter (dic.values()))).keys()
-        #writer.writeheader (tests)
+
         writer.writerow (tests)
         for qc in dic:
-                writer.writerow ([qc] + list(dic[qc].values()))
-                
+                values = list(dic[qc].values())
+                values.sort ()
+                writer.writerow ([qc] + values)
         f.close()
         
         
