@@ -41,6 +41,10 @@ class FastqcTestCase (unittest.TestCase):
                 self.assertRaises(fastqc_reports.TypeError, fastqc_reports.get_file_list, folder_files, True)
                 # Error if folder without report folders
                 self.assertRaises(fastqc_reports.TypeError, fastqc_reports.get_file_list, zip_files, False)
+                
+                # Return exact numbers of files in the folder
+                self.assertEqual (len (fastqc_reports.get_file_list (zip_files, True)), 4)
+                self.assertEqual (len (fastqc_reports.get_file_list (folder_files, False)), 3)
         
         def testZipRecognition (self):
                 # Test is returning TRUE when -z parameter is given, and FALSE when not

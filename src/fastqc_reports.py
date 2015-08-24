@@ -99,7 +99,11 @@ def get_file_list (path, isZip):
                 if len(files) == 0:
                         raise TypeError ("No .zip files were found")
         else:
-                pass        
+                for f in fileList:
+                        if f.endswith ("_fastqc") and os.path.isdir(os.path.join (path, f)):
+                                files.append (f)
+                if len(files) == 0:
+                        raise TypeError ("No correct folders were found. See -help")
         return files
 
 def main (argv):
