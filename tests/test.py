@@ -27,7 +27,7 @@ class FastqcTestCase (unittest.TestCase):
                 test_path = "src"
                 path = os.path.join (os.getcwd(), test_path)
                 test_result = fastqc_reports.input_handler (("-i", test_path))
-                self.assertEqual (test_result['i'] == path)
+                self.assertEqual (test_result['i'], path)
 
         def testZipFiles (self):
                 """Test Error. Directory should contain at least one .zip file if -z argument was passed"""
