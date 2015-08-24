@@ -17,21 +17,21 @@ class Error (Exception):
         pass
 
 class InputError (Error):
-	""" Exceptions raised when input was wrong
-		Attributes:
-			msg -- explanation of the error
-	"""
-	def __init__(self, msg):
-		self.msg = msg
-		pass
+        """ Exceptions raised when input was wrong
+                Attributes:
+                        msg -- explanation of the error
+        """
+        def __init__(self, msg):
+                self.msg = msg
+                pass
 
 class TypeError (Error):
-	""" Exception if file types are wrong
-		Attributes:
-			msg -- explanation
-	"""
-	def __init__ (self, msg):
-		self.msg = msg
+        """ Exception if file types are wrong
+                Attributes:
+                        msg -- explanation
+        """
+        def __init__ (self, msg):
+                self.msg = msg  
                 
 class ZipContentError (Error):
         """ Error when no files are finding in the report """
@@ -87,7 +87,7 @@ def input_handler (argv):
 
         if len (inputFolder) == 0: inputFolder = os.getcwd()
         if len(outputFolder) == 0: outputFolder = inputFolder
-        if len(outputfile) == 0: outputFile = "fastqc_report.csv"	
+        if len(outputfile) == 0: outputFile = "fastqc_report.csv"
 
         return {'i':inputFolder, 'o':outputFolder, 'f':outputFile, 'z':isZip}
 
@@ -144,6 +144,42 @@ def get_info_from_zip (zipFilePath):
         
         return parsed_data 
         
+def combine_reports (dir, isZip):
+        """ Give a dictionary with fileNames as keys and dictionary with fastqc results as value """
+        combinedResults = {}
+        
+        for f in dir:
+                data = {}
+                if isZip:
+                        data = get_info_from_zip (f)
+                else: 
+                        path = os.path.join(f, "summary.txt")     
+                        sum = open (path, 'r')                        
+                        data = parse_fastqc_summary (sum, False)
+                        sum.close()
+                        
+                reportName = os.path.basename(f).split("_fastqc")[0]
+                combinedResults[reportName] = data
+        return (combinedResults)
+        
+def report_to_csv (dic, path, filename):
+        """ Print out dictionary information into csv file """
+        fileLoc = os.path.join (path, filename)
+        f = open (fileLoc, 'w', newline='')
+        writer = csv.writer(f)
+        
+        # Create a header
+        tests = (list ((next (iter (dic.values()))).keys()))
+        tests = ["Name"] + tests
+        #print (tests)
+        #tests = ["Name"] + list (next (iter (dic.values()))).keys()
+        #writer.writeheader (tests)
+        writer.writerow (tests)
+        for qc in dic:
+                writer.writerow ([qc] + list(dic[qc].values()))
+                
+        f.close()
+        
         
 def main (argv):
         # Proceed options've been passed through the function call
@@ -156,41 +192,8 @@ def main (argv):
         isZip=['z']
         
         file_list = get_file_list (inputFolder, isZip)
+        results = combine_reports (file_list, isZip)
         
-        combined_resulst = {}
-        
-        for f in file_list:
-                if isZip:
-                        data = get_info_from_zip (f)
-                else: 
-                        sum = open (os.path.join(f), "summary.txt")
-                        data = parse_fastqc_summary
-        all_mod_scores = []
-
-        # Read fastqc_data.txt file in each archive:
-        for file in files:
-                archive = zipfile.ZipFile(file, 'r') # open '_fastqc.zip' file
-                members = archive.namelist() # return list of archive members
-                fname = [member for member in members if 'fastqc_data.txt' in member][0] # find 'fastqc_data.txt' in members
-                data = archive.open(fname) # open 'fastqc_data.txt'
-
-                # Get module scores for this file:
-                mod_scores = [file]
-                for line in data:
-                        text = line.decode('utf-8') 
-                        if '>>' in text and '>>END' not in text:
-                                text = text.lstrip('>>').split()
-                                module = '_'.join(text[:-1])
-                                result = text[-1]
-                                mod_scores.append(scores[result])
-
-        # Append to all module scores list:
-        all_mod_scores.append(mod_scores)
-
-        # close all opened files:
-        data.close()
-        archive.close()
-
         # Write scores out to a CSV file:
         fileLoc = os.path.join(os.path.dirname(outputFolder), outputFile)
         #fileLoc = outputFolder + "/" + outputFile

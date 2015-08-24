@@ -69,8 +69,53 @@ class FastqcTestCase (unittest.TestCase):
                 """ Should return correct dictionary """
                 filePath = os.path.join (os.getcwd(), "tests", "zip_files", "test_fastqc.zip")                
                 result = fastqc_reports.get_info_from_zip (filePath)
+                self.assertIsInstance (result, dict)
                 self.assertEqual (len(result), 12)
                 self.assertEqual (result['Basic Statistics'], 'PASS')
+                
+        def testReportCreation (self):
+                """ Returned dictionary should be correct and have the same length, name as test files """
+                zipPath = os.path.join (os.getcwd(), "tests", "zip_files")
+                zipList = fastqc_reports.get_file_list (zipPath, True)
+                
+                dirPath = os.path.join (os.getcwd(), "tests", "report_folders")
+                dirList = fastqc_reports.get_file_list (dirPath, False)
+                
+                zipDict = fastqc_reports.combine_reports (zipList, True)
+                dirDict = fastqc_reports.combine_reports (dirList, False)
+                
+                self.assertIsInstance (zipDict, dict)
+                self.assertIsInstance (dirDict, dict)
+                
+                self.assertEqual (len(zipDict), 5)
+                self.assertEqual (len(dirDict), 3)
+                
+                self.assertIn ("test", zipDict)
+                self.assertIn ("001_f", dirDict)
+                
+                self.assertEqual (len (zipDict["test"]), 12)
+                self.assertEqual (len (dirDict["001_f"]), 12)
+                
+                self.assertEqual (zipDict["test"]['Basic Statistics'], 'PASS')
+                self.assertEqual (dirDict["001_f"]['Basic Statistics'], 'PASS')
+        
+        def testCSVWriter (self):
+                """ Check functionality of csv writer """
+                output_folder = os.path.join (os.getcwd(), "tests", "output_test")
+                filename = 'file_exists.csv'
+                # Check, was the file created
+                fastqc_reports.report_to_csv ({'1':{'2':3}}, output_folder, filename)
+                filepath = os.path.join(output_folder, filename)
+                self.assertTrue (os.path.exists (filepath))
+                os.remove (filepath)
+                
+                # Create file
+                #zipPath = os.path.join (os.getcwd(), "tests", "zip_files")
+                #zipList = fastqc_reports.get_file_list (zipPath, True)
+                #fastqc_reports.report_to_csv (fastqc_reports.combine_reports(zipList, True), output_folder, "poo.csv")
+                
+                
+                
 
 if __name__ == '__main__':
         unittest.main()
