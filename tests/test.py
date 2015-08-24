@@ -44,9 +44,9 @@ class FastqcTestCase (unittest.TestCase):
         
         def testZipRecognition (self):
                 # Test is returning TRUE when -z parameter is given, and FALSE when not
-                test_result = fastqc_reports.input_handler (('z'))
-                self.assertTrue (test_result['z'])
-                self.assertFasle (fastqc_reports.input_handler()['z'])
+                
+                self.assertTrue (fastqc_reports.input_handler(("-z", ""))['z'])
+                self.assertFalse (fastqc_reports.input_handler((""))['z'])
 
         def testWrongFileExtention (self):
                 """Test Error. Given name should be with .csv extention"""
