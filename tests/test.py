@@ -43,7 +43,7 @@ class FastqcTestCase (unittest.TestCase):
                 self.assertRaises(fastqc_reports.TypeError, fastqc_reports.get_file_list, zip_files, False)
                 
                 # Return exact numbers of files in the folder
-                self.assertEqual (len (fastqc_reports.get_file_list (zip_files, True)), 4)
+                self.assertEqual (len (fastqc_reports.get_file_list (zip_files, True)), 5)
                 self.assertEqual (len (fastqc_reports.get_file_list (folder_files, False)), 3)
         
         def testZipRecognition (self):
@@ -55,6 +55,22 @@ class FastqcTestCase (unittest.TestCase):
         def testWrongFileExtention (self):
                 """Test Error. Given name should be with .csv extention"""
                 self.assertRaises(fastqc_reports.InputError, fastqc_reports.input_handler, ("-f", "poo.bar"))
+        
+        def testFileParser (self):
+                """ Should return dictionary """
+                filePath = os.path.join (os.getcwd(), "tests", "report_folders", "001_f_fastqc", "summary.txt")
+                f = open (filePath)
+                result = fastqc_reports.parse_fastqc_summary (f, False)
+                self.assertEqual (len(result), 12)
+                self.assertEqual (result['Basic Statistics'], 'PASS')
+                f.close()
+                
+        def testZipFileParser (self):
+                """ Should return correct dictionary """
+                filePath = os.path.join (os.getcwd(), "tests", "zip_files", "test_fastqc.zip")                
+                result = fastqc_reports.get_info_from_zip (filePath)
+                self.assertEqual (len(result), 12)
+                self.assertEqual (result['Basic Statistics'], 'PASS')
 
 if __name__ == '__main__':
         unittest.main()
