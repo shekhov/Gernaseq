@@ -13,8 +13,8 @@ isZip=False
 
 
 class Error (Exception):
-	"""Base error for this module"""
-	pass
+        """Base error for this module"""
+        pass
 
 class InputError (Error):
 	""" Exceptions raised when input was wrong
@@ -34,127 +34,134 @@ class TypeError (Error):
 		self.msg = msg
 
 def input_handler (argv):
-	def Usage ():
-		errorMSG="Usage:\nfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>\nfastqc_report.py -h" \
-				 " for help"
-		print (errorMSG)
-		sys.exit()
+        inputFolder=""
+        outputFolder=""
+        outputfile=""
+        isZip=False
+        
+        def Usage ():
+                errorMSG="Usage:\nfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>\nfastqc_report.py -h" \
+                                 " for help"
+                print (errorMSG)
+                sys.exit()
 
-	try:
-		opts, rest = getopt.getopt (argv, 'hzo:f:i:', ["help", "zip", "outputFolder=", "filename=", "inputFolder="])
-	except getopt.GetoptError:
-		Usage()
+        try:
+                opts, rest = getopt.getopt (argv, 'hzo:f:i:', ["help", "zip", "outputFolder=", "filename=", "inputFolder="])
+        except getopt.GetoptError:
+                Usage()
 
-	for opt, arg in opts:
-		if opt in ("-h", "--help"):
-			print ("Combine reports from fastqc to a single .csv table")
-			print ("Usage: \tfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>")
-			print ("Or: \tfastqc_reports.py --inputFolder <inputFolder> --outputFolder <outputFolder> --filename <outputFileName>")
-			print ("Arguments: ")
-			print ("\t-z (zip)an optional argument, set if zip archives should be scanned instead of folders")
-			print ("\t-i (inputFolder) a location of folders made by fastqc package. If not specified, use a current folder")
-			print ("\t-o (outputFolder) A specified location for the output file. If not specified, the default file report will be created in the input folder")
-			print ("\t-f (filename) A name of the report file with extention (.csv). Default name is fastqc_report.csv")
-			sys.exit(2)
+        for opt, arg in opts:
+                if opt in ("-h", "--help"):
+                        print ("Combine reports from fastqc to a single .csv table")
+                        print ("Usage: \tfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>")
+                        print ("Or: \tfastqc_reports.py --inputFolder <inputFolder> --outputFolder <outputFolder> --filename <outputFileName>")
+                        print ("Arguments: ")
+                        print ("\t-z (zip)an optional argument, set if zip archives should be scanned instead of folders")
+                        print ("\t-i (inputFolder) a location of folders made by fastqc package. If not specified, use a current folder")
+                        print ("\t-o (outputFolder) A specified location for the output file. If not specified, the default file report will be created in the input folder")
+                        print ("\t-f (filename) A name of the report file with extention (.csv). Default name is fastqc_report.csv")
+                        sys.exit(2)
 
-		elif opt in ("-z", "--zip"):
-			isZip=True
+                elif opt in ("-z", "--zip"):
+                        isZip=True
 
-		elif opt in ("-i", "--inputFolder"):
-			path = os.path.join(os.getcwd(), arg)
-			if os.path.isdir (path) == True:
-				inputFolder = path
-			else: raise InputError (path+ " is not a directory")
+                elif opt in ("-i", "--inputFolder"):
+                        path = os.path.join(os.getcwd(), arg)
+                        if os.path.isdir (path) == True:
+                                inputFolder = path
+                        else: raise InputError (path+ " is not a directory")
 
-		elif opt in ("-o", "--outputFolder"):
-			outputFolder = arg
+                elif opt in ("-o", "--outputFolder"):
+                        outputFolder = arg
 
-		elif opt in ("-f", "--filename"):
-			if arg[-3:] == 'csv':
-				outputFile = arg
-			else: raise InputError ( "Wrong file type was given. Read help")
+                elif opt in ("-f", "--filename"):
+                        if arg[-3:] == 'csv':
+                                outputFile = arg
+                        else: raise InputError ( "Wrong file type was given. Read help")
 
-	if len (inputFolder) == 0: inputFolder = os.getcwd()
-	if len(outputFolder) == 0: outputFolder = inputFolder
-	if len(outputfile) == 0: outputFile = "fastqc_report.csv"	
+        if len (inputFolder) == 0: inputFolder = os.getcwd()
+        if len(outputFolder) == 0: outputFolder = inputFolder
+        if len(outputfile) == 0: outputFile = "fastqc_report.csv"	
 
-def main (argv):
+        return {'i':inputFolder, 'o':outputFolder, 'f':outputFile, 'z':isZip}
 
-	input = input_handler (argv)
-			
-	#print ("Input folder is " + inputFolder)
+        def main (argv):
 
-	# List modules used by FastQC:
-	modules = ['Basic_Statistics',
-			   'Per_base_sequence_quality',
-			   'Per_tile_sequence_quality',
-			   'Per_sequence_quality_scores',
-			   'Per_base_sequence_content',
-			   'Per_sequence_GC_content',
-			   'Per_base_N_content',
-			   'Sequence_Length_Distribution',
-			   'Sequence_Duplication_Levels',
-			   'Overrepresented_sequences',
-			   'Adapter_Content',
-			   'Kmer_Content']
+                input = input_handler (argv)
+                        
+                #print ("Input folder is " + inputFolder)
 
-	# Set dict to convert module results to integer scores:
-	scores = {'pass': 1,
-			  'warn': 0,
-			  'fail': -1}
+                # List modules used by FastQC:
+                modules = ['Basic_Statistics',
+                           'Per_base_sequence_quality',
+                           'Per_tile_sequence_quality',
+                           'Per_sequence_quality_scores',
+                           'Per_base_sequence_content',
+                           'Per_sequence_GC_content',
+                           'Per_base_N_content',
+                           'Sequence_Length_Distribution',
+                           'Sequence_Duplication_Levels',
+                           'Overrepresented_sequences',
+                           'Adapter_Content',
+                           'Kmer_Content']
 
-	# Get list of '_fastqc.zip' files generated by FastQC:
-	fileList = os.listdir(inputFolder)
-	if (len(fileList) == 0) :raise TypeError ("Input folder is empty")
-	files = []
-	folders = []
-	#for f in fileList:
-	#	if f.find("_fastqc"):
-	if (isZip):
-		for f in fileList:
-			if f.endswith ("_fastqc.zip"):
-				files.append(f)
-		if len(files) == 0:
-			raise TypeError ("No .zip files were found")
-	else:
-		pass
-	#for f in files: print (f)
-	
-	# List to collect module scores for each '_fastqc.zip' file:
-	all_mod_scores = []
+                # Set dict to convert module results to integer scores:
+                scores = {'pass': 1,
+                          'warn': 0,
+                          'fail': -1}
 
-	# Read fastqc_data.txt file in each archive:
-	for file in files:
-		archive = zipfile.ZipFile(file, 'r') # open '_fastqc.zip' file
-		members = archive.namelist() # return list of archive members
-		fname = [member for member in members if 'fastqc_data.txt' in member][0] # find 'fastqc_data.txt' in members
-		data = archive.open(fname) # open 'fastqc_data.txt'
-	  
-		# Get module scores for this file:
-		mod_scores = [file]
-		for line in data:
-			text = line.decode('utf-8') 
-			if '>>' in text and '>>END' not in text:
-				text = text.lstrip('>>').split()
-				module = '_'.join(text[:-1])
-				result = text[-1]
-				mod_scores.append(scores[result])
-		
-		# Append to all module scores list:
-		all_mod_scores.append(mod_scores)
-		
-		# close all opened files:
-		data.close()
-		archive.close()
+                # Get list of '_fastqc.zip' files generated by FastQC:
+                fileList = os.listdir(inputFolder)
+                if (len(fileList) == 0) :raise TypeError ("Input folder is empty")
+                files = []
+                folders = []
+                #for f in fileList:
+                #	if f.find("_fastqc"):
+                if (isZip):
+                        for f in fileList:
+                                if f.endswith ("_fastqc.zip"):
+                                        files.append(f)
+                if len(files) == 0:
+                        raise TypeError ("No .zip files were found")
+                else:
+                        pass
+                #for f in files: print (f)
 
-	# Write scores out to a CSV file:
-	fileLoc = os.path.join(os.path.dirname(outputFolder), outputFile)
-	#fileLoc = outputFolder + "/" + outputFile
-	with open(fileLoc, 'w', newline="") as f:
-		writer = csv.writer(f)
-		for mod_scores in all_mod_scores:
-			writer.writerow(mod_scores)
-		f.close()
-		
+                # List to collect module scores for each '_fastqc.zip' file:
+                all_mod_scores = []
+
+                # Read fastqc_data.txt file in each archive:
+                for file in files:
+                        archive = zipfile.ZipFile(file, 'r') # open '_fastqc.zip' file
+                        members = archive.namelist() # return list of archive members
+                        fname = [member for member in members if 'fastqc_data.txt' in member][0] # find 'fastqc_data.txt' in members
+                        data = archive.open(fname) # open 'fastqc_data.txt'
+
+                # Get module scores for this file:
+                mod_scores = [file]
+                for line in data:
+                        text = line.decode('utf-8') 
+                        if '>>' in text and '>>END' not in text:
+                                text = text.lstrip('>>').split()
+                                module = '_'.join(text[:-1])
+                                result = text[-1]
+                                mod_scores.append(scores[result])
+
+                # Append to all module scores list:
+                all_mod_scores.append(mod_scores)
+
+                # close all opened files:
+                data.close()
+                archive.close()
+
+                # Write scores out to a CSV file:
+                fileLoc = os.path.join(os.path.dirname(outputFolder), outputFile)
+                #fileLoc = outputFolder + "/" + outputFile
+                with open(fileLoc, 'w', newline="") as f:
+                        writer = csv.writer(f)
+                for mod_scores in all_mod_scores:
+                        writer.writerow(mod_scores)
+                f.close()
+
 if __name__== "__main__":
-	main (sys.argv[1:])
+        main (sys.argv[1:])

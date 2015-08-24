@@ -25,8 +25,8 @@ class FastqcTestCase (unittest.TestCase):
                 self.assertRaises(fastqc_reports.InputError, fastqc_reports.input_handler, ("-i", "poo"))
                 # Test works only if calles from parent directory
                 test_path = "src"
-                path = os.path.join (sys.getcwd(), test_path)
-                test_result = fastqc_reports.input_handler ("-i", test_path)
+                path = os.path.join (os.getcwd(), test_path)
+                test_result = fastqc_reports.input_handler (("-i", test_path))
                 self.assertEqual (test_result['i'] == path)
 
         def testZipFiles (self):
