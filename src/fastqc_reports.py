@@ -57,6 +57,7 @@ def input_handler (argv):
                 Usage()
 
         for opt, arg in opts:
+                #TODO help: Update. Version of Python
                 if opt in ("-h", "--help"):
                         print ("\n\tCombine reports from fastqc to a single .csv table")
                         print ("Usage: \tfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>")

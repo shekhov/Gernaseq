@@ -118,6 +118,7 @@ class FastqcTestCase (unittest.TestCase):
                 # Clean
                 os.remove (filepath)
                 os.rmdir (output_folder)
+                #TODO: Add more tests to this section
 
 
 
