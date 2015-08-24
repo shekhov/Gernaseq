@@ -1,10 +1,15 @@
-# Import necessary libraries:
+﻿# Import necessary libraries:
 import sys
 import csv
 import os
 import subprocess
 import zipfile
 import getopt
+
+inputFolder=""
+outputFolder=""
+outputfile=""
+isZip=False
 
 
 class Error (Exception):
@@ -28,15 +33,7 @@ class TypeError (Error):
 	def __init__ (self, msg):
 		self.msg = msg
 
-
-
-def main (argv):
-
-	inputFolder=""
-	outputFolder=""
-	outputfile=""
-	isZip=False
-
+def input_handler (argv):
 	def Usage ():
 		errorMSG="Usage:\nfastqc_reports.py -i <inputFolder> -o <outputFolder> -f <outputFileName>\nfastqc_report.py -h" \
 				 " for help"
@@ -79,9 +76,13 @@ def main (argv):
 
 	if len (inputFolder) == 0: inputFolder = os.getcwd()
 	if len(outputFolder) == 0: outputFolder = inputFolder
-	if len(outputfile) == 0: outputFile = "fastqc_report.csv"
+	if len(outputfile) == 0: outputFile = "fastqc_report.csv"	
+
+def main (argv):
+
+	input = input_handler (argv)
 			
-	print ("Input folder is " + inputFolder)
+	#print ("Input folder is " + inputFolder)
 
 	# List modules used by FastQC:
 	modules = ['Basic_Statistics',

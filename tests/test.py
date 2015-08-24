@@ -1,4 +1,4 @@
-__author__ = 'Anton Shekhov'
+﻿__author__ = 'Anton Shekhov'
 import unittest
 import getopt
 import sys
@@ -16,20 +16,27 @@ class FastqcTestCase (unittest.TestCase):
     @unittest.skip
     def testHelpCalled (self):
         """ Test Error. Argument -h or help should cause System exit """
-        self.assertRaises(SystemExit, fastqc_reports.main, ("-h", ""))
-        self.assertRaises(SystemExit, fastqc_reports.main, ("--help", ""))
+        self.assertRaises(SystemExit, fastqc_reports.input_handler, ("-h", ""))
+        self.assertRaises(SystemExit, fastqc_reports.input_handler, ("--help", ""))
 
-    def testWrongInputPath (self):
-        """Test Error. Path should exist as a directory"""
-        self.assertRaises(fastqc_reports.InputError, fastqc_reports.main, ("-i", "poo"))
+    def testInputPath (self):
+        """Tests for input folder"""
+		# Should give an error if not exit
+        self.assertRaises(fastqc_reports.InputError, fastqc_reports.input_handler, ("-i", "poo"))
+		# Test works only if calles from parent directory
+		test_path = "src"
+		path = os.path.join (sys.getcwd(), test_path)
+		test_result = fastqc_reports.input_handler ("-i", test_path)
+		self.assertEqual (test_result['i'] = path)
 
     def testZipFiles (self):
         """Test Error. Directory should contain at least one .zip file if -z argument was passed"""
-        self.assertRaises(fastqc_reports.TypeError, fastqc_reports.main, ("-z", "-i", "src"))
+		# Test works only if calles from parent directory
+        self.assertRaises(fastqc_reports.TypeError, fastqc_reports.test_files, ("-z", "-i", "src"))
 
     def testWrongFileExtention (self):
         """Test Error. Given name should be with .csv extention"""
-        self.assertRaises(fastqc_reports.InputError, fastqc_reports.main, ("-f", "poo.bar"))
+        self.assertRaises(fastqc_reports.InputError, fastqc_reports.input_handler, ("-f", "poo.bar"))
 
 if __name__ == '__main__':
     unittest.main()
