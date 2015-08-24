@@ -144,6 +144,24 @@ def get_info_from_zip (zipFilePath):
         
         return parsed_data 
         
+def combine_reports (dir, isZip):
+        """ Give a dictionary with fileNames as keys and dictionary with fastqc results as value """
+        combinedResults = {}
+        
+        for f in dir:
+                data = {}
+                if isZip:
+                        data = get_info_from_zip (f)
+                else: 
+                        path = os.path.join(f, "summary.txt")     
+                        sum = open (path, 'r')                        
+                        data = parse_fastqc_summary (sum, False)
+                        sum.close()
+                        
+                reportName = os.path.basename(f).split("_fastqc")[0]
+                combinedResults[reportName] = data
+        return (combinedResults)
+        
         
 def main (argv):
         # Proceed options've been passed through the function call
@@ -157,14 +175,8 @@ def main (argv):
         
         file_list = get_file_list (inputFolder, isZip)
         
-        combined_resulst = {}
-        
-        for f in file_list:
-                if isZip:
-                        data = get_info_from_zip (f)
-                else: 
-                        sum = open (os.path.join(f), "summary.txt")
-                        data = parse_fastqc_summary
+
+                
         all_mod_scores = []
 
         # Read fastqc_data.txt file in each archive:
