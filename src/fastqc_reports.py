@@ -42,7 +42,7 @@ class ZipContentError (Error):
 def input_handler (argv):
         inputFolder=""
         outputFolder=""
-        outputfile=""
+        outputFile=""
         isZip=False
         
         def Usage ():
@@ -83,11 +83,13 @@ def input_handler (argv):
                 elif opt in ("-f", "--filename"):
                         if arg[-3:] == 'csv':
                                 outputFile = arg
+                        
                         else: raise InputError ( "Wrong file type was given. Read help")
+                        #print ("Arg: ", arg, " OUT: ", outputFile)
 
         if len (inputFolder) == 0: inputFolder = os.getcwd()
         if len(outputFolder) == 0: outputFolder = inputFolder
-        if len(outputfile) == 0: outputFile = "fastqc_report.csv"
+        if len(outputFile) == 0: outputFile = "fastqc_report.csv"
 
         return {'i':inputFolder, 'o':outputFolder, 'f':outputFile, 'z':isZip}
 
@@ -188,7 +190,7 @@ def main (argv):
         # Assign parameters
         inputFolder=input['i']
         outputFolder=input['o']
-        outputfile=input['f']
+        outputFile=input['f']
         isZip=['z']
         
         file_list = get_file_list (inputFolder, isZip)
@@ -196,12 +198,7 @@ def main (argv):
         
         # Write scores out to a CSV file:
         fileLoc = os.path.join(os.path.dirname(outputFolder), outputFile)
-        #fileLoc = outputFolder + "/" + outputFile
-        with open(fileLoc, 'w', newline="") as f:
-                writer = csv.writer(f)
-        for mod_scores in all_mod_scores:
-                writer.writerow(mod_scores)
-        f.close()
+        report_to_csv (results, outputFolder, outputFile)
 
 if __name__== "__main__":
         main (sys.argv[1:])

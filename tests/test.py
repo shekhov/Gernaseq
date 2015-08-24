@@ -25,7 +25,9 @@ class FastqcTestCase (unittest.TestCase):
                 path = os.path.join (os.getcwd(), test_path)
                 test_result = fastqc_reports.input_handler (("-i", test_path))
                 self.assertEqual (test_result['i'], path)
-                self.assertEqual (test_result['o'], path)                
+                self.assertEqual (test_result['o'], path)  
+                # Test is file will have the same name as given 
+                self.assertEqual (fastqc_reports.input_handler (("-f", "poo.csv"))['f'], "poo.csv") 
 
         def testListFiles (self):
                 """Given folder should contain needable files"""
