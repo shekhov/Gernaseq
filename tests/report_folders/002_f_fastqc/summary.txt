@@ -1,0 +1,12 @@
+PASS	Basic Statistics	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+PASS	Per base sequence quality	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+WARN	Per tile sequence quality	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+PASS	Per sequence quality scores	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+FAIL	Per base sequence content	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+FAIL	Per sequence GC content	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+PASS	Per base N content	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+WARN	Sequence Length Distribution	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+FAIL	Sequence Duplication Levels	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+WARN	Overrepresented sequences	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+PASS	Adapter Content	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz
+FAIL	Kmer Content	1521_B_run241_TTGGAGGT_L005_R1_001_f.fastq.gz

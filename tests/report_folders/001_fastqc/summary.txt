@@ -1,0 +1,11 @@
+PASS	Basic Statistics	669_D_TTGGTATG_L007_R1_001.fastq.gz
+PASS	Per base sequence quality	669_D_TTGGTATG_L007_R1_001.fastq.gz
+PASS	Per sequence quality scores	669_D_TTGGTATG_L007_R1_001.fastq.gz
+FAIL	Per base sequence content	669_D_TTGGTATG_L007_R1_001.fastq.gz
+FAIL	Per base GC content	669_D_TTGGTATG_L007_R1_001.fastq.gz
+FAIL	Per sequence GC content	669_D_TTGGTATG_L007_R1_001.fastq.gz
+PASS	Per base N content	669_D_TTGGTATG_L007_R1_001.fastq.gz
+PASS	Sequence Length Distribution	669_D_TTGGTATG_L007_R1_001.fastq.gz
+FAIL	Sequence Duplication Levels	669_D_TTGGTATG_L007_R1_001.fastq.gz
+WARN	Overrepresented sequences	669_D_TTGGTATG_L007_R1_001.fastq.gz
+FAIL	Kmer Content	669_D_TTGGTATG_L007_R1_001.fastq.gz
