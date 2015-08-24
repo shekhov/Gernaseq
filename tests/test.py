@@ -69,37 +69,8 @@ class FastqcTestCase (unittest.TestCase):
                 """ Should return correct dictionary """
                 filePath = os.path.join (os.getcwd(), "tests", "zip_files", "test_fastqc.zip")                
                 result = fastqc_reports.get_info_from_zip (filePath)
-                self.assertIsInstance (result, dict)
                 self.assertEqual (len(result), 12)
                 self.assertEqual (result['Basic Statistics'], 'PASS')
-                
-        def testReportCreation (self):
-                """ Returned dictionary should be correct and have the same length, name as test files """
-                zipPath = os.path.join (os.getcwd(), "tests", "zip_files")
-                zipList = fastqc_reports.get_file_list (zipPath, True)
-                
-                dirPath = os.path.join (os.getcwd(), "tests", "report_folders")
-                dirList = fastqc_reports.get_file_list (dirPath, False)
-                
-                zipDict = fastqc_reports.combine_reports (zipList, True)
-                dirDict = fastqc_reports.combine_reports (dirList, False)
-                
-                self.assertIsInstance (zipDict, dict)
-                self.assertIsInstance (dirDict, dict)
-                
-                self.assertEqual (len(zipDict), 5)
-                self.assertEqual (len(dirDict), 3)
-                
-                self.assertIn ("test", zipDict)
-                self.assertIn ("001_f", dirDict)
-                
-                self.assertEqual (len (zipDict["test"]), 12)
-                self.assertEqual (len (dirDict["001_f"]), 12)
-                
-                self.assertEqual (zipDict["test"]['Basic Statistics'], 'PASS')
-                self.assertEqual (dirDict["001_f"]['Basic Statistics'], 'PASS')
-
-                
 
 if __name__ == '__main__':
         unittest.main()
