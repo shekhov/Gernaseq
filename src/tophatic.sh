@@ -58,7 +58,7 @@ else
 	# Create variables of pattern
 	for f in "${in1[0]}"*"${in1[1]}"; do
 		let=("${f:index1-1:index2}")
-		letters+=("$let")
+		letters+=("$let"); done
 		#echo Indexes: "$index1" and "$index2", Letter: "$let"; done
 
 	# Create commands for tophat based on letters we extracted
@@ -75,7 +75,7 @@ else
 	#done
 	# get list of the files on the input location
 	exit
-fi 
+fi
 
 # End of file
 # Made by Anton Shekhov
