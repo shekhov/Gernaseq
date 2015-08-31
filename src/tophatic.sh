@@ -12,7 +12,21 @@ To begin, type:
 
 Where % sign is the identificator of the treatment (i.e. just letter) and everything else after depends on the file you are using.
 Script will look to the input files and if %_R1 and %_R2 match, it will run tophat command.
-EOF
+
+########### UPDATE ###############
+Now script can handle different commands. For usage you need to have files with some pattern in their names.
+For instance:
+	You want to copy files from one location to another, but the name of the files are the same, but not the folders they are into.
+	Parent_folder:
+		A_folder:
+			output.txt
+		B_folder:
+			output.txt
+		etc...
+	to copy you need to type:
+		bash tophatic.sh cp Parent_folder/%_folder/output.txt Destination_folder/%_output.txt
+	This will create for each %_folder in a Parent_folder file named %_output.txt in Destination_folder, where % is an identificator, specific to each folder (A, B, etc). 
+	IMPORTANT: For now, the script will look to the second parameter from the end for the pattern forlder. So in our example it was Parent_folder/%_folder/output.txt 
 }
 
 args="$@"
