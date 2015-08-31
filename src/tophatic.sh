@@ -41,14 +41,16 @@ else
 	# Look is there number after % sign. If not then length of cutting is equal 1
 	index2=1
 	index2Possible="${inp1:index1:1}"
+	plus=0
 	#echo "$index2Possible"
 	if [[ $index2Possible =~ ^-?[0-9]+$ ]] ; then
 		index2=$index2Possible
+		plus=1
 	fi
 	#echo "$index2"
 
 	# Separate %  prefix and suffix. The number after % should be also cutted
-	in1=("${inp1:0:index1-1}" "${inp1:index1}")
+	in1=("${inp1:0:index1-1}" "${inp1:index1+plus}")
 	#echo "${in1[0]}" "${in1[1]}"
 
 	# IFS='%' read -a in1 <<< "$inp1"
