@@ -28,9 +28,9 @@ else
 	# Separate command line by % sign
 	IFS=' ' read -a arr <<< "$args"
 	len=${#arr[@]} # length of the array
-	# Two last elements are the imput files
+	# Two second last element is treats as a position of a pattern definition
 	inp1=${arr[len-2]}
-	inp2=${arr[len-1]}
+	#inp2=${arr[len-1]}
 
 	# Position of % sign
 	index1=`expr index "$inp1" %`
@@ -38,14 +38,28 @@ else
 
 	letters=()
 	# Check this location
-	IFS='%' read -a in1 <<< "$inp1"
+	# Look is there number after % sign. If not then length of cutting is equal 1
+	index2=1
+	index2Possible="${inp1:index1:1}"
+	#echo "$index2Possible"
+	if [[ $index2Possible =~ ^-?[0-9]+$ ]] ; then
+		index2=$index2Possible
+	fi
+	#echo "$index2"
+
+	# Separate %  prefix and suffix. The number after % should be also cutted
+	in1=("${inp1:0:index1-1}" "${inp1:index1}")
+	#echo "${in1[0]}" "${in1[1]}"
+
+	# IFS='%' read -a in1 <<< "$inp1"
 	# Position of suffix, so we can cut letters
-	index2=`expr index "$inp1" "${in1[1]}"`
+	#index2=`expr index "$inp1" "${in1[1]}"`
 
 	# Create variables of pattern
 	for f in "${in1[0]}"*"${in1[1]}"; do
-		#echo Indexes: "$index2" and "$index1" 
-		letters+=("${f:index1-1:index2-1}"); done
+		let=("${f:index1-1:index2}")
+		letters+=("$let")
+		#echo Indexes: "$index1" and "$index2", Letter: "$let"; done
 
 	# Create commands for tophat based on letters we extracted
 	for l in "${letters[@]}"; do 
