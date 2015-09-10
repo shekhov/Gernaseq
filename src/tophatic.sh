@@ -27,7 +27,8 @@ For instance:
 		bash tophatic.sh cp Parent_folder/%_folder/output.txt Destination_folder/%_output.txt
 	This will create for each %_folder in a Parent_folder file named %_output.txt in Destination_folder, where % is an identificator, specific to each folder (A, B, etc). 
 	IMPORTANT: For now, the script will look to the second parameter from the end for the pattern forlder. So in our example it was Parent_folder/%_folder/output.txt 
-}
+EOF
+	}
 
 args="$@"
 
