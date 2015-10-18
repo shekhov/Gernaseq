@@ -6,7 +6,7 @@ def trimming (input_path, output_path, end, start=0, keep=False, quiet=False):
         input_file = open (input_path, 'r')
         output_file1 = open (output_path, "w")
 
-        output_data = {}
+        output_data = []
 
         data = input_file.read().split ("\n")
         nseq = (len(data)-1)/2
@@ -20,11 +20,11 @@ def trimming (input_path, output_path, end, start=0, keep=False, quiet=False):
                 if ">" in f:
                         if len (s) >= end:
                                 temp_s = s[start:end]   
-                                output_data[f] = temp_s
+                                output_data.append([f, temp_s])
                         else :
                                 count += 1
                                 if keep:
-                                        output_data[f] = s
+                                        output_data.append([f, s])
                                         keep_count += 1
         if not quiet:
                 print (count , " sequences were less than ", end-start)
@@ -32,7 +32,7 @@ def trimming (input_path, output_path, end, start=0, keep=False, quiet=False):
                 print ("Final number of sequences is ", nseq-count)
 
                 print ("Writing output file...")
-        for names, seq in output_data.items():
+        for names, seq in output_data:
                 output_file1.write (names + '\n')
                 output_file1.write (seq + "\n")
 
