@@ -3,7 +3,6 @@ __author__ = 'Anton Shekhov'
 import unittest
 import sys
 import os
-#import argparse
 
 sys.path.append  (os.path.abspath("./"))
 sys.path.append (os.path.abspath("../"))
@@ -24,9 +23,7 @@ class TrimLengthCase (unittest.TestCase):
                 self.third_2_20_keep = "ATACTA"
 
         def testInputHandler (self):
-                """
-                Check returning arguments
-                """
+                """Check returning arguments"""
                 args = [self.input, self.output , '20']
                 result = trim_length.InputHandler(args)
 
@@ -35,9 +32,7 @@ class TrimLengthCase (unittest.TestCase):
                 self.assertEqual (result.end, 20)
 
         def testOutputFileNoKeep (self):
-                """
-                Check correct output
-                """
+                """Check correct output"""
                 # First trimming from 0 to 20 without keeping
                 trim_length.trimming(self.input, self.output, self.end, quiet=True)
 
@@ -50,9 +45,7 @@ class TrimLengthCase (unittest.TestCase):
                 os.remove(self.output)
 
         def testOutputFileKeep (self):
-                """
-                Check all keeping sequences and also shorter lines
-                """
+                """Check all keeping sequences and also shorter lines"""
 
                 # Second trimming from 2 till 20
                 trim_length.trimming(self.input, self.output2, self.end, start=2, keep=True, quiet=True)
