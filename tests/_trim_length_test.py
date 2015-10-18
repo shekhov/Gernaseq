@@ -13,14 +13,16 @@ class TrimLengthCase (unittest.TestCase):
         def setUp(self):
                 self.input = os.path.join("tests", "testing_files", "trim_length.fasta")
                 self.output = os.path.join("tests", "testing_files", "temp.fasta")
+                self.output2 = os.path.join("tests", "testing_files", "temp2.fasta")
                 self.end = 20
                 self.start = 2
                 self.first_0_20 = "AAAAAAAAAAAAAAAAAAAA"
-                self.first_2_20 = "AAAAAAAAAAAAAAAAAAAA"
+                self.first_2_20 = "AAAAAAAAAAAAAAAAAA"
                 self.second_0_20 = "TTTTCTTTTTTTTTTTTTTT"
-                self.second_2_20 = "TTCTTTTTTTTTTTTTTTTT"
+                self.second_2_20 = "TTCTTTTTTTTTTTTTTT"
                 self.third_0_20_keep = "ATACTA"
                 self.third_2_20_keep = "ATACTA"
+
         def testInputHandler (self):
                 """
                 Check returning arguments
@@ -32,16 +34,36 @@ class TrimLengthCase (unittest.TestCase):
                 self.assertEqual (result.output, self.output)
                 self.assertEqual (result.end, 20)
 
-        def testOutputFile (self):
+        def testOutputFileNoKeep (self):
                 """
                 Check correct output
                 """
-                args_first = [self.input, self.output, self.end]
-                args_second = [self.input, self.output, self.end, "-s", self.start]
-                first_trim = trim_length.trimming(self.input, self.output, self.end, quiet=True)
+                # First trimming from 0 to 20 without keeping
+                trim_length.trimming(self.input, self.output, self.end, quiet=True)
 
+                output = open (self.output, 'r')
+                o_lines = output.read().split("\n")
+                self.assertEqual(len(o_lines), 5)
+                self.assertEqual (o_lines[1], self.first_0_20)
+                self.assertEqual(o_lines[3], self.second_0_20)
+                output.close()
+                os.remove(self.output)
 
+        def testOutputFileKeep (self):
+                """
+                Check all keeping sequences and also shorter lines
+                """
 
+                # Second trimming from 2 till 20
+                trim_length.trimming(self.input, self.output2, self.end, start=2, keep=True, quiet=True)
+                output = open (self.output2, 'r')
+                o_lines = output.read().split("\n")
+                self.assertEqual(len(o_lines), 7)
+                self.assertEqual(o_lines[1], self.first_2_20)
+                self.assertEqual (o_lines[3], self.second_2_20)
+                self.assertEqual (o_lines[5], self.third_2_20_keep)
+                output.close()
+                os.remove(self.output2)
 
 if __name__ == '__main__':
         unittest.main()
