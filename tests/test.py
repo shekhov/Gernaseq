@@ -7,7 +7,7 @@ import os.path
 # Spend two hours to figure this shit out!!!
 sys.path.append  (os.path.abspath("./"))
 from src import fastqc_reports
-
+#TODO: Separate test files
 class FastqcTestCase (unittest.TestCase):
         """ Test of the fastqc report merging tool"""
         @unittest.skip
