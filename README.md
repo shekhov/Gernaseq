@@ -1,7 +1,15 @@
 Gernaseq
 ===============================================================================
-Gernaseq is a library of scripts which are from the category: easier to make than look for tool which do the same.
-
+Gernaseq is a library of scripts which are from the category: easier to make than look for tool which do the same. 
+Scripts are located in the scr folder. 
+* *trim_length.py*
+  * Trim fasta/fastq sequence files by given window length. Can drop lines with a length smaller then given window
+* *combine_velvet_reports.py*
+  * Combine reports from velvet assembly LOG files to a single .csv table.
+* *fastqc_reports.py*
+  * Combine reports from fastqc tool into single .csv table.
+* *tophatic.sh*
+  * A bash script that can implement given command over a set of files.
 
 Licence
 ===============================================================================
@@ -14,4 +22,4 @@ You should have received a copy of the GNU General Public License along with thi
 
 Author
 ===============================================================================
-I am a PhD student at the [Max Planck Institute for Chemical Ecology] (ice.mpg.de), in Jena, Germany, studying insect/plant biochemistry
+I am a PhD student at the [Max Planck Institute for Chemical Ecology] (http://ice.mpg.de), in Jena, Germany, studying insect/plant biochemistry
