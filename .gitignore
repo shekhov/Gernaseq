@@ -42,5 +42,8 @@ Network Trash Folder
 Temporary Items
 .apdisk
 
-# PyCharm ignor
+# PyCharm ignore
 .idea/
+
+# PyCache ignore
+.__pycache__/
