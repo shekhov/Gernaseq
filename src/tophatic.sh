@@ -66,11 +66,6 @@ else
 
 	# Separate %  prefix and suffix. The number after % should be also cutted
 	in1=("${inp1:0:index1-1}" "${inp1:index1+plus}")
-	#echo "${in1[0]}" "${in1[1]}"
-
-	# IFS='%' read -a in1 <<< "$inp1"
-	# Position of suffix, so we can cut letters
-	#index2=`expr index "$inp1" "${in1[1]}"`
 
 	# Create variables of pattern
 	for f in "${in1[0]}"*"${in1[1]}"; do
@@ -83,14 +78,6 @@ else
 		thisCommand=${args//%/$l}
 		$thisCommand
 	done
-
-	#echo input1: "$inp1"
-	#echo input2: "$inp2"
-	# Going through all of them
-	#for i in "${arr[@]}"; do
-	#	echo "$i"
-	#done
-	# get list of the files on the input location
 	exit
 fi
 
