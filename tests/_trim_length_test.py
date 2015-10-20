@@ -22,10 +22,8 @@ class TrimLengthCase (unittest.TestCase):
                 self.third_0_20_keep = "ATACTA"
                 self.third_2_20_keep = "ATACTA"
                 
-                self.input_dic = {"> first line": "AAAAAAATTTTTTT", 
-                                "> second line": "CCCCAAAATT", 
-                                "> third line": "ATATAT"}
-                self.output_arr = [["> first line", "AAAAAAA"],
+                self.input_dic = ["> first line", "AAAAAAATTTTTTT", "> second line", "CCCCAAAATT", "> third line",  "ATATA"]
+                self.output_arr = [["> first line", "AAAAAA"],
                                 ["> second line", "CCCCAA"]]
 
         def testInputHandler (self):
@@ -38,7 +36,7 @@ class TrimLengthCase (unittest.TestCase):
                 self.assertEqual (result.end, 20)
                 
         def testTrimmingReturn (self):
-                res = trim_length.trim (self.input_dic, start=0, end=6, keep=False)
+                res = trim_length.trim (self.input_dic, end=6, start=0, keep=False, quiet=True)
                 self.assertEqual (2, len(res))
                 self.assertEqual (self.output_arr, res)
 
