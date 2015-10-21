@@ -85,12 +85,20 @@ def input_handler (args):
                 
         parser.add_argument ("range", metavar="MIN-MAX", nargs="?", help="two odd numbers with dash between them representing minimum and maximum value of the range to scan")
         
-        parser.add_argument ("output_file", metavar="OUTPUT_FILE", nargs="?", default="velvet_reports.csv", help = "Name of the output file in csv format")
+        parser.add_argument ("output_file", metavar="OUTPUT_FILE", nargs="?", default="velvet_report.csv", help = "Name of the output file in csv format")
 
         
         parser.add_argument ("-o", "--output", metavar="OUTPUT_FOLDER", default=os.path.join (os.getcwd()), help = "Path to the folder, where output file will be created") 
         
-        return parser.parse_args(args)
+        result = parser.parse_args(args)
+        # Finishing 
+        if result.output_file == 'velvet_report.csv': 
+                result.output_file = 'velvet_report' + "_" + result.range + ".csv"
+        result.range = [int(x) for x in result.range.split("-")]
+        
+        
+        return result
+        
 
 def writeReports (writer, input):
         for i in range (input['r'][0], input['r'][1], 2):

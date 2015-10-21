@@ -16,10 +16,10 @@ class VelvetTestCase (unittest.TestCase):
         def testRightInput (self):
                 i_path = os.getcwd()
                 o_path = os.getcwd()
-                #r_test = [1,5]
-                r_test = "1-5"
+                r_test = [1,5]
+                #r_test = "1-5"
                 f_test = "velvet_report_1-5.csv"
-                test_result = v.input_handler ([i_path, r_test, "-o", o_path]) 
+                test_result = v.input_handler ([i_path, "1-5", "-o", o_path]) 
                 self.assertEqual (i_path, test_result.input)
                 self.assertEqual (f_test, test_result.output_file)
                 self.assertEqual (o_path, test_result.output)
