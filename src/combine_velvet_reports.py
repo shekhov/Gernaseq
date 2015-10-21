@@ -77,12 +77,21 @@ def input_handler2 (argv):
 
         return {'i':inputFolder, 'o':outputFolder, 'f':outputFile, 'r':rangeN}
 
-def input_handler (argv):
+def input_handler (args):
         parser = argparse.ArgumentParser(formatter_class=argparse.ArgumentDefaultsHelpFormatter,
                                          description='Combine reports from velvet assembly to a single .csv table')
-        parser.add_argument ("input", metavar="INPUT_FOLDER", nargs="?", def=os.path.join (os.getcwd()), help = "Path to the folder where assemblies are located")
-        parser.add_argument ("output", metavar="OUTPUT_FILE", nargs="?", default="velvet_reports.csv", help = "Name of the output file in csv format")
-        parser.add_argument ("-o", "--output", metavar="OUTPUT_FOLDER", default=os.path.join (os.getcwd(), "../"), help = "Path to the folder, where output file will be created") 
+                                         
+        parser.add_argument ("input", metavar="INPUT_FOLDER", nargs="?", default=os.getcwd(), help = "Path to the folder where assemblies are located")
+                
+        parser.add_argument ("range", metavar="MIN-MAX", nargs="?", help="two odd numbers with dash between them representing minimum and maximum value of the range to scan")
+        
+        parser.add_argument ("output_file", metavar="OUTPUT_FILE", nargs="?", default="velvet_reports.csv", help = "Name of the output file in csv format")
+
+        
+        parser.add_argument ("-o", "--output", metavar="OUTPUT_FOLDER", default=os.path.join (os.getcwd()), help = "Path to the folder, where output file will be created") 
+        
+        return parser.parse_args(args)
+
 def writeReports (writer, input):
         for i in range (input['r'][0], input['r'][1], 2):
                 path = os.path.join (os.getcwd(), input['i'], str(i), "Log")
