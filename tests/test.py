@@ -9,6 +9,7 @@ sys.path.append (os.path.abspath("../"))
 # unittest declaration
 import tests._fastqc_reports_test
 import tests._trim_length_test
+import tests._combine_velvet_reports_test
 
 def __suite ():
         suite = unittest.TestSuite()
@@ -20,6 +21,7 @@ def __suite ():
         return suite
 
 if __name__ == '__main__':
-        v = int (sys.argv[1:][0])
+        v = None
+        if len (sys.argv[1:]) != 0: v = int (sys.argv[1:][0])
         if not v: v = 1
         unittest.TextTestRunner(verbosity=v).run(__suite())
