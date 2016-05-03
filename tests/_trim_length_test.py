@@ -21,6 +21,10 @@ class TrimLengthCase (unittest.TestCase):
                 self.second_2_20 = "TTCTTTTTTTTTTTTTTT"
                 self.third_0_20_keep = "ATACTA"
                 self.third_2_20_keep = "ATACTA"
+                
+                self.input_dic = ["> first line", "AAAAAAATTTTTTT", "> second line", "CCCCAAAATT", "> third line",  "ATATA"]
+                self.output_arr = [["> first line", "AAAAAA"],
+                                ["> second line", "CCCCAA"]]
 
         def testInputHandler (self):
                 """Check returning arguments"""
@@ -30,6 +34,11 @@ class TrimLengthCase (unittest.TestCase):
                 self.assertEqual (result.input, self.input)
                 self.assertEqual (result.output, self.output)
                 self.assertEqual (result.end, 20)
+                
+        def testTrimmingReturn (self):
+                res = trim_length.trim (self.input_dic, end=6, start=0, keep=False, quiet=True)
+                self.assertEqual (2, len(res))
+                self.assertEqual (self.output_arr, res)
 
         def testOutputFileNoKeep (self):
                 """Check correct output"""

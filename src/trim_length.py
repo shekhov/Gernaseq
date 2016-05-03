@@ -1,24 +1,15 @@
 import argparse
 import sys
 
-def trimming (input_path, output_path, end, start=0, keep=False, quiet=False):
-
-        input_file = open (input_path, 'r')
-        output_file1 = open (output_path, "w")
-
-        output_data = []
-
-        data = input_file.read().split ("\n")
-        nseq = (len(data)-1)/2
-
-        if not quiet: print ("Initial number of sequences were = ", nseq)
-
+def trim (input_dic, end, start=0, keep=False, quiet=False):
         count = 0
         keep_count = 0
-
-        for i in range (len(data)-1):
-                f = data[i] # name
-                s = data[i+1] # sequence
+        
+        output_data = []
+        
+        for i in range (len(input_dic)-1):
+                f = input_dic[i] # name
+                s = input_dic[i+1] # sequence
                 if ">" in f:
                         if len (s) >= end:
                                 temp_s = s[start:end]   
@@ -32,7 +23,21 @@ def trimming (input_path, output_path, end, start=0, keep=False, quiet=False):
                 print (count , " sequences were less than ", end-start)
                 if keep: print (keep_count, " sequences were kept, regardless their small length")
                 print ("Final number of sequences is ", nseq-count)
-                print ("Writing output file...")
+                print ("Writing output file...")  
+     
+        return output_data
+
+def trimming (input_path, output_path, end, start=0, keep=False, quiet=False):
+
+        input_file = open (input_path, 'r')
+        output_file1 = open (output_path, "w")
+
+        data = input_file.read().split ("\n")
+        nseq = (len(data)-1)/2
+
+        if not quiet: print ("Initial number of sequences were = ", nseq)
+
+        output_data = trim (data, end, start, keep, quiet)
 
         for names, seq in output_data:
                 output_file1.write (names + '\n')
