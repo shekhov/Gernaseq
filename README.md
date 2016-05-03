@@ -10,6 +10,11 @@ Scripts are located in the scr folder.
   * Combine reports from fastqc tool into single .csv table.
 * *tophatic.sh*
   * A bash script that can implement given command over a set of files.
+* *mDNA_translate_orf.py*
+  * Chooses the longest open reading frame from mDNA and translate it to AA sequence. 
+  	* Input parameters are: 
+ 		* input_folder - the location of a folder where multiple fasta files with DNA sequences are
+    	* output_folder - the location (will create folder if not exists) of a folder where output will go. Files will be created with the same name as input.
 
 Licence
 ===============================================================================
